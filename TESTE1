@@ -1,0 +1,57 @@
+#include <SoftwareSerial.h>
+
+int baud_rate = 9600;
+int pin_gps = 4;
+int pin_power = 5;
+char frame[200];
+
+char latitude[15];
+char longitude[15];
+char altitude[6];
+char date[16];
+char time[7];
+char satellites[3];
+char speedOTG[10];
+char course[10];
+char imei;
+char cimei;
+
+int ledpin = 13;
+int ledgps = 10;
+int ledground = 11;
+int ledengine = 8;
+
+char resposta[20]; 
+
+void setup(){
+    
+  Serial.begin(baud_rate);
+
+
+  
+  pinMode(pin_gps,OUTPUT);
+  pinMode(pin_power,OUTPUT);
+  pinMode(ledengine,OUTPUT);
+  
+  pinMode(ledpin,OUTPUT);
+  pinMode(ledgps,OUTPUT);
+  pinMode(ledground,OUTPUT);    
+  
+  digitalWrite(ledground,LOW);
+
+  digitalWrite(ledpin,HIGH);
+  delay(1000);
+  //ligando aqui o GPS
+  digitalWrite(ledgps, HIGH);
+  digitalWrite(ledgps, LOW);
+  delay(5000);
+  //testando o comando AT
+  Serial.println("AT");
+  respostaSerial.read();
+ 
+  
+
+  }
+void loop(){
+}
+
