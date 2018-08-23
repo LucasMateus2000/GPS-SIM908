@@ -1,69 +1,89 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <SoftwareSerial.h>
 
-int main () {
-   float val;
-   char str[20];
-   
-   strcpy(str, "98993489");
-   val = atof(str);
-   printf("String value = %s, Float value = %f\n", str, val);
+int baud_rate = 9600;
+int pin_gps = 4;
+int pin_power = 5;
+char frame[200];
 
-   strcpy(str, "tutorialspoint.com");
-   val = atof(str);
-   printf("String value = %s, Float value = %f\n", str, val);
+char latitude[15];
+char longitude[15];
+char altitude[6];
+char date[16];
+char time[7];
+char satellites[3];
+char speedOTG[10];
+char course[10];
+char imei;
+char cimei;
 
-   return(0);
+int ledpin = 13;
+int ledgps = 10;
+int ledground = 11;
+int ledengine = 8;
+int resposta; 
+
+void setup(){
+    
+  Serial.begin(baud_rate);
+
+
+  
+  pinMode(pin_gps,OUTPUT);
+  pinMode(pin_power,OUTPUT);
+  pinMode(ledengine,OUTPUT);
+  
+  pinMode(ledpin,OUTPUT);
+  pinMode(ledgps,OUTPUT);
+  pinMode(ledground,OUTPUT);    
+  
+  digitalWrite(ledground,LOW);
+
+  digitalWrite(ledpin,HIGH);
+  delay(1000);
+  //ligando aqui o GPS
+  digitalWrite(ledgps, HIGH);
+  digitalWrite(ledgps, LOW);
+  delay(5000);
+  //testando o comando AT
+  Serial.println("AT");
+  resposta = Serial.read();
+  Serial.println(resposta);
+  
+
+  }
+void loop(){
 }
-----------------------------------------------------------------------------
-/* strtok.c */
- 
-#include <stdio.h>
-#include <string.h>
- 
-int main(void)
-{
-   char *psRetorno;
-   char sFrase[]="Mario Quintana, o maior poeta gaúcho";
- 
-   printf("\nFrase = %s", sFrase);
- 
-   /* Primeira pesquisa por espaço em branco. */
-   psRetorno = strtok(sFrase, " ");
- 
-   printf("\nRetorno = %s", psRetorno);
-   printf("\nFrase = %s", sFrase);
- 
-   do
-   {
-      /* Nas próximas chamadas, deve-se passar um ponteiro “nulo”. 
-         Isto “indica” para a função que a pesquisa deve continuar 
-         no ponteiro anterior. */
-      psRetorno = strtok('\0', ", "); //Demais pesquisas por , (vírgula) ou espaço em branco.
- 
-      /* Um valor nulo (NULL) é considerado sempre falso em comparações 
-         booleanas (verdadeiro ou falso). */
-      if(psRetorno)
-      {
-         printf("\nRetorno = %s", psRetorno);
-      } 
-   } while(psRetorno);
-   return 0;
+/*
+int8_t sendATcommand(char* ATcommand, char* expected_answer1, unsigned int timeout){
+
+    x=0,  answer=0;
+    char response[100];
+    unsigned long previous;
+    // Initialize the string
+    memset(response, '\0', 100);    
+    delay(100);
+    // Clean the input buffer    
+    while( Serial.available() > 0) Serial.read();    
+    // Send the AT command 
+    Serial.println(ATcommand);    
+
+    x = 0;
+    previous = millis();
+
+    // this loop waits for the answer
+    do{
+        if(Serial.available() != 0){    
+            response[x] = Serial.read();
+            x++;
+            // check if the desired answer is in the response of the module
+            if (strstr(response, expected_answer1) != NULL)    
+            {
+                answer = 1;
+            }
+        }
+        // Waits for the asnwer with time out
+    }
+    while((answer == 0) && ((millis() - previous) < timeout));    
+    return answer;
 }
----------------------------------------------------------
-#include <string.h>
-#include <stdio.h>
-int main(){
-   char str[80] = "Isto eh - um - teste";
-   char s[2] = "-";
-   char *token;
-   /* pega o primeiro token */
-   token = strtok(str, s);
-   /* caminha através de outros tokens */
-   while( token != NULL ){
-      printf( " %s\n", token );
-      token = strtok(NULL, s);
-   }
-   return(0);
-}
+    */
